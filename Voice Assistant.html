@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Assistant</title>
+    <style>
+        body {background-color: cyan;}
+    </style>
+</head>
+<body>
+    <h1>Hi I am A Voice Assistant - How Can I Help You ?</h1>
+    <button class="talk">Talk</button>
+    <h3 class="content"></h3>
+    <script>
+
+        const btn = document.querySelector('.talk');
+        const content = document.querySelector('.content');
+
+
+        const YouTube = [
+            ' I am Opening YouTube'
+        ];
+
+
+        const Weather = [
+            'SHowing The Weather'
+        ]
+
+
+
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+
+        recognition.onstart = function(){
+            console.log('Listening . . .')
+        }
+        recognition.onresult = function(event) {
+            const current = event.resultIndex;
+
+            const transcript = event.results[current][0].transcript;
+            content.textContent = transcript;
+            readOutLout(transcript);
+        };
+        btn.addEventListener('click', () =>{
+            recognition.start();
+        });
+
+        function readOutLout(message){
+            const speech = new SpeechSynthesisUtterance();
+
+            speech.text = 'I am not able to understand';
+
+            if(message.includes('YouTube')){
+                const finalText = 
+                    YouTube[Math.floor(Math.random()*YouTube.length)];
+                    speech.text = finalText;
+                    window.open('https://www.youtube.com')
+            }
+            if(message.includes('weather')){
+                const finalText = 
+                    Weather[Math.floor(Math.random()*Weather.length)];
+                    speech.text = finalText;
+                    window.open('https://www.google.com/search?q=weather&rlz=1C5CHFA_enUS853US853&oq=Wea&aqs=chrome.0.69i59j69i57j0i20i263i433j0i433j0j69i60l3.1550j0j7&sourceid=chrome&ie=UTF-8')
+            }
+            speech.volume = 1;
+            speech.rate = 1.1;
+            speech.pitch = 1;
+
+            window.speechSynthesis.speak(speech);
+        }
+    </script>
+</body>
+</html>
